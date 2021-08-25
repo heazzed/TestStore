@@ -15,6 +15,19 @@ namespace TestStore.Models
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<OrderProduct> OrderProducts { get; set; }
+
         public StoreContext(DbContextOptions<StoreContext> options) : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Client>().HasKey(c => c.OrderId);
+
+            modelBuilder.Entity<User>().HasKey(u => u.Email);
+
+            modelBuilder.Entity<Product>().HasKey(p => p.Id);
+
+            modelBuilder.Entity<OrderProduct>().HasKey(op => new { op.OrderId, op.ProductId });
+        }
     }
 }
