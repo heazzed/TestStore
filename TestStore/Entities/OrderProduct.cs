@@ -3,7 +3,6 @@ namespace TestStore.Entities
 {
     public class OrderProduct
     {
-
         public Order Order { get; set; }
 
         public string OrderId { get; set; }

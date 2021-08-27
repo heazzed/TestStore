@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TestStore.Controllers
 {
+    // TEST CONTROLLER
+
     [ApiController]
     [Route("[controller]/[action]")]
     public class HomeController : Controller

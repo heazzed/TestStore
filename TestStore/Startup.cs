@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using TestStore.Models;
+using TestStore.Services;
 
 namespace TestStore
 {
@@ -26,9 +27,7 @@ namespace TestStore
 
         public IConfiguration Configuration { get; }
 
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
-        readonly string AllowAllOrigins = "_AllowAllOrigins";
+        readonly string FrontentOrigins = "FrontentOrigins";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -38,20 +37,20 @@ namespace TestStore
             services.AddDbContext<StoreContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            //services.AddCors(options =>
-            //{
-            //    options.AddPolicy(name: AllowAllOrigins, builder => builder.AllowAnyOrigin());
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: FrontentOrigins,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://localhost:8080")
+                                                          .AllowAnyMethod()
+                                                          .AllowAnyHeader();
+                                  });
+            });
 
-            //    options.AddPolicy(name: MyAllowSpecificOrigins,
-            //                      builder =>
-            //                      {
-            //                          builder.WithOrigins("http://localhost:8080")
-            //                                              .AllowAnyMethod()
-            //                                              .AllowAnyHeader();
-            //                      });
-            //});
+            services.AddTransient<CategoryService>();
 
-            services.AddCors();
+            services.AddTransient<ProductService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,13 +65,11 @@ namespace TestStore
 
             app.UseRouting();
 
-            app.UseCors(options => options.AllowAnyOrigin());
-
-            //app.UseCors(AllowAllOrigins);
+            app.UseCors(FrontentOrigins);
 
             //app.UseAuthentication();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

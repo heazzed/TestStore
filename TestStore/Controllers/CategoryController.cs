@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using TestStore.Entities;
 using TestStore.Models;
+using TestStore.Services;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,28 +14,19 @@ namespace TestStore.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    //[EnableCors("MyAllowSpecificOrigins")]
-    //[EnableCors("AllowAllOrigins")]
     public class CategoryController : Controller
     {
-        StoreContext db;
+        CategoryService categoryService;
 
-        public CategoryController(StoreContext db)
+        public CategoryController(CategoryService categoryService)
         {
-            this.db = db;
+            this.categoryService = categoryService;
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetCategories()
         {
-            List<Category> categories = new List<Category>();
-
-            foreach (var item in db.Categories)
-            {
-                categories.Add(item);
-            }
-
-            return Json(categories);
+            return Json(categoryService.GetCategories());
         }
     }
 }
