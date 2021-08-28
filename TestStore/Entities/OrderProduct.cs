@@ -3,12 +3,23 @@ namespace TestStore.Entities
 {
     public class OrderProduct
     {
-        public Order Order { get; set; }
+        #nullable enable
+        public string? Id { get; set; }
 
-        public string OrderId { get; set; }
+        public string? Img { get; set; }
+        #nullable disable
 
-        public Product Product { get; set; }
+        public Category Category { get; set; } // Need it?
+                                                 // May be not needed if make FK from categoryId to Id in Categories
 
-        public string ProductId { get; set; }
+        public string CategoryId { get; set; }
+
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
+        public int Pieces { get; set; }
+
+        public decimal Price { get; set; }
     }
 }

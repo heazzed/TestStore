@@ -16,7 +16,7 @@ namespace TestStore.Controllers
     [Route("api/[controller]")]
     public class CategoryController : Controller
     {
-        CategoryService categoryService;
+        readonly CategoryService categoryService;
 
         public CategoryController(CategoryService categoryService)
         {

@@ -77,15 +77,35 @@ namespace TestStore.Migrations
 
             modelBuilder.Entity("TestStore.Entities.OrderProduct", b =>
                 {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CategoryId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Img")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Pieces")
+                        .HasColumnType("int");
 
-                    b.HasKey("OrderId", "ProductId");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.HasIndex("ProductId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("OrderId");
 
                     b.ToTable("OrderProducts");
                 });
@@ -144,21 +164,15 @@ namespace TestStore.Migrations
 
             modelBuilder.Entity("TestStore.Entities.OrderProduct", b =>
                 {
-                    b.HasOne("TestStore.Entities.Order", "Order")
+                    b.HasOne("TestStore.Entities.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryId");
 
-                    b.HasOne("TestStore.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("TestStore.Entities.Order", null)
+                        .WithMany("Products")
+                        .HasForeignKey("OrderId");
 
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("TestStore.Entities.Product", b =>
@@ -173,6 +187,8 @@ namespace TestStore.Migrations
             modelBuilder.Entity("TestStore.Entities.Order", b =>
                 {
                     b.Navigation("Client");
+
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

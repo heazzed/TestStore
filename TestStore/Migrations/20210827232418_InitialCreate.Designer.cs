@@ -9,8 +9,8 @@ using TestStore.Models;
 namespace TestStore.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20210825084219_Initial")]
-    partial class Initial
+    [Migration("20210827232418_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -79,16 +79,35 @@ namespace TestStore.Migrations
 
             modelBuilder.Entity("TestStore.Entities.OrderProduct", b =>
                 {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CategoryId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Img")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Pieces")
+                        .HasColumnType("int");
 
-                    b.HasKey("OrderId", "ProductId");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.HasIndex("OrderId")
-                        .IsUnique();
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("OrderId");
 
                     b.ToTable("OrderProducts");
                 });
@@ -99,7 +118,7 @@ namespace TestStore.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CategoryId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -117,6 +136,8 @@ namespace TestStore.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
                 });
@@ -145,11 +166,24 @@ namespace TestStore.Migrations
 
             modelBuilder.Entity("TestStore.Entities.OrderProduct", b =>
                 {
+                    b.HasOne("TestStore.Entities.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
                     b.HasOne("TestStore.Entities.Order", null)
-                        .WithOne("Products")
-                        .HasForeignKey("TestStore.Entities.OrderProduct", "OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Products")
+                        .HasForeignKey("OrderId");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("TestStore.Entities.Product", b =>
+                {
+                    b.HasOne("TestStore.Entities.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("TestStore.Entities.Order", b =>

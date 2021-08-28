@@ -48,9 +48,11 @@ namespace TestStore
                                   });
             });
 
-            services.AddTransient<CategoryService>();
-
-            services.AddTransient<ProductService>();
+            services.AddTransient<CategoryService>(); // 
+                                                      //
+            services.AddTransient<ProductService>();  // Need Transient? Maybe Scoped?
+                                                      //    
+            services.AddTransient<OrderService>();    //
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

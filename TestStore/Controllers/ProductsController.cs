@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using TestStore.Entities;
 using TestStore.Models;
 using TestStore.Services;
@@ -14,10 +16,9 @@ namespace TestStore.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [EnableCors("FrontentOrigins")]
     public class ProductsController : Controller
     {
-        ProductService productService;
+        readonly ProductService productService;
 
         public ProductsController(ProductService productService)
         {
@@ -39,17 +40,9 @@ namespace TestStore.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task UpdateProductById(string id)
+        public async Task<IActionResult> UpdateProductByIdAsync()
         {
-            var reqBody = HttpContext.Request.Body;
-            using (StreamReader reader = new StreamReader(reqBody))
-            {
-                var body = await reader.ReadToEndAsync(); // json from front with new productinfo to update in DB
-
-                // TODO
-                // Make logic to parse json and update DB productinfo
-            } 
-             
+            return StatusCode(await productService.UpdateProductByIdAsync(HttpContext.Request));
         }
     }
 }

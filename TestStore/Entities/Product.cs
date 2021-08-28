@@ -13,7 +13,8 @@ namespace TestStore.Entities
         public string? Img { get; set; }
         #nullable disable
 
-        public Category Category { get; set; }
+        public Category Category { get; set; } // Need it?
+                                                 // May be not needed if make FK from categoryId to Id in Categories
 
         public string CategoryId { get; set; }
 

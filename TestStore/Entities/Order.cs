@@ -12,13 +12,13 @@ namespace TestStore.Entities
         public string? Id { get; set; }
         #nullable disable
 
-        public OrderProduct[] Products { get; set; }
+        public ICollection<OrderProduct> Products { get; set; }
 
         public Client Client { get; set; }
 
         public string Status { get; set; }
 
-        public enum StatusEnum
+        public enum StatusEnum // Need it? // From front order-json getting this
         {
             Обрабатывается,
             Подтвержден,
