@@ -21,7 +21,7 @@ namespace TestStore.Services
 
         public IQueryable<Order> GetOrders()
         {
-            return db.Orders;
+            return db.Orders.Include(op => op.Products).Include(c => c.Client);
         }
 
         public async Task<int> CreateOrdersAsync(HttpRequest httpRequest)

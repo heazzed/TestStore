@@ -25,6 +25,12 @@ namespace TestStore.Controllers
             this.productService = productService;
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateProduct([FromBody] Product product)
+        {
+            return StatusCode(await productService.CreateProductAsync(product));
+        }
+
         [HttpGet]
         public IActionResult GetProducts(string categoryId)
         {
@@ -43,6 +49,13 @@ namespace TestStore.Controllers
         public async Task<IActionResult> UpdateProductByIdAsync()
         {
             return StatusCode(await productService.UpdateProductByIdAsync(HttpContext.Request));
+        }
+
+        [HttpPatch]
+        [Route("{id}")]
+        public async Task<IActionResult> PatchProductByIdAsync([FromBody] Product product)
+        {
+            return StatusCode(await productService.PatchProductByIdAsync(product));
         }
     }
 }

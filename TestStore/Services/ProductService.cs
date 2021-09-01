@@ -19,6 +19,18 @@ namespace TestStore.Services
             this.db = db;
         }
 
+        public async Task<int> CreateProductAsync(Product product)
+        {
+            product.Id = db.Products.Max(p => p.Id) + "1"; // Need to Generate Id
+
+            await db.Products.AddAsync(product);
+
+            var result = await db.SaveChangesAsync();
+
+            return result == 0 ? StatusCodes.Status502BadGateway : StatusCodes.Status200OK;
+        }
+
+
         public IQueryable<Product> GetProducts(string categoryId = null)
         {
             return categoryId == null ? db.Products : db.Products.Where(p => p.CategoryId == categoryId);
@@ -47,6 +59,58 @@ namespace TestStore.Services
 
             return result == 0 ? StatusCodes.Status502BadGateway : StatusCodes.Status200OK;
                 // Right code 502? // Must I return status code at all?
+        }
+
+        public async Task<int> PatchProductByIdAsync(Product patchProduct)
+        {
+            var dbProduct = db.Products.FirstOrDefault(p => p.Id == patchProduct.Id);
+
+            // TODO Logic how to patch
+
+            if (patchProduct.Img != dbProduct.Img)
+            {
+                dbProduct.Img = patchProduct.Img;
+            }
+
+            if (patchProduct.CategoryId != dbProduct.CategoryId)
+            {
+                dbProduct.CategoryId = patchProduct.CategoryId;
+            }
+
+            if (patchProduct.Name != dbProduct.Name)
+            {
+                dbProduct.Name = patchProduct.Name;
+            }
+
+            if (patchProduct.Description != dbProduct.Description)
+            {
+                dbProduct.Description = patchProduct.Description;
+            }
+
+            if (patchProduct.Pieces != dbProduct.Pieces)
+            {
+                dbProduct.Pieces = patchProduct.Pieces;
+            }
+
+            if (patchProduct.Price != dbProduct.Price)
+            {
+                dbProduct.Price = patchProduct.Price;
+            }
+
+            //...
+
+            // More if-cases
+
+            //...
+
+            // Make to switch?  Or make smth anoter?
+
+            db.Update(dbProduct); // Need it?
+
+            var result = await db.SaveChangesAsync();
+
+            return result == 0 ? StatusCodes.Status502BadGateway : StatusCodes.Status200OK;
+            
         }
     }
 }

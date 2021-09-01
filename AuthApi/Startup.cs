@@ -1,25 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using TestStore.Models;
-using TestStore.Services;
+using TestStore.AuthApi.Models;
+using TestStore.AuthApi.Services;
 
-namespace TestStore
+namespace TestStore.AuthApi
 {
     public class Startup
     {
+        // This method gets called by the runtime. Use this method to add services to the container.
+        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -29,13 +28,12 @@ namespace TestStore
 
         readonly string FrontentOrigins = "FrontentOrigins";
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddControllers();
 
             services.AddDbContext<StoreContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddCors(options =>
             {
@@ -48,11 +46,7 @@ namespace TestStore
                                   });
             });
 
-            services.AddTransient<CategoryService>(); // 
-                                                      //
-            services.AddTransient<ProductService>();  // Need Transient? Maybe Scoped?
-                                                      //    
-            services.AddTransient<OrderService>();    //
+            services.AddTransient<LoginService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,15 +57,11 @@ namespace TestStore
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseHttpsRedirection();
-
             app.UseRouting();
 
             app.UseCors(FrontentOrigins);
 
             app.UseAuthentication();
-
-            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

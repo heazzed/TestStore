@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestStore", "TestStore\TestStore.csproj", "{9B8756F9-B9C3-48C1-8A90-44A387EB236D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestStore.WebApi", "TestStore\TestStore.WebApi.csproj", "{9B8756F9-B9C3-48C1-8A90-44A387EB236D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestStore.AuthApi", "AuthApi\TestStore.AuthApi.csproj", "{5E5EFBE8-AFB4-4013-99A6-79463995C300}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{9B8756F9-B9C3-48C1-8A90-44A387EB236D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B8756F9-B9C3-48C1-8A90-44A387EB236D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B8756F9-B9C3-48C1-8A90-44A387EB236D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E5EFBE8-AFB4-4013-99A6-79463995C300}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E5EFBE8-AFB4-4013-99A6-79463995C300}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E5EFBE8-AFB4-4013-99A6-79463995C300}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E5EFBE8-AFB4-4013-99A6-79463995C300}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
