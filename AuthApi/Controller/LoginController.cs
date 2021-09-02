@@ -23,12 +23,6 @@ namespace TestStore.AuthApi.Controller
             this.loginService = loginService;
         }
 
-        [HttpGet]
-        public IActionResult Hello()
-        {
-            return Content("Hello!");
-        }
-
         [HttpPost]
         public IActionResult Login([FromBody] User reqUser)
         {

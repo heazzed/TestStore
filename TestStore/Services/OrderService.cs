@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc;
 
 namespace TestStore.Services
 {
@@ -24,14 +25,8 @@ namespace TestStore.Services
             return db.Orders.Include(op => op.Products).Include(c => c.Client);
         }
 
-        public async Task<int> CreateOrdersAsync(HttpRequest httpRequest)
+        public async Task<int> CreateOrderAsync(Order order)
         {
-            using StreamReader reader = new StreamReader(httpRequest.Body);
-
-            var body = await reader.ReadToEndAsync();
-
-            Order order = JsonConvert.DeserializeObject<Order>(body);
-
             var ordersMaxId = db.Orders.Max(x => x.Id);
 
             order.Id = ordersMaxId + "1"; // Need to generate Id's
@@ -46,6 +41,34 @@ namespace TestStore.Services
         public Order GetOrderById(string id)
         {
             return db.Orders.Include(o => o.Client).Include(o => o.Products).FirstOrDefault(o => o.Id == id);
+        }
+
+        public async Task<int> PatchOrderByIdAsync(string id, Order order)
+        {
+            var dbOrder = await db.Orders.SingleOrDefaultAsync(o => o.Id == id);
+
+            dbOrder.Status = order.Status;
+
+            db.Update(dbOrder);
+
+            var result = await db.SaveChangesAsync();
+
+            return result == 0 ? StatusCodes.Status502BadGateway : StatusCodes.Status200OK;
+        }
+
+        public async Task<int> DeleteOrderByIdAsync(string id)
+        {
+            var dbOrder = await db.Orders.SingleOrDefaultAsync(o => o.Id == id);
+
+            var dbOrderProducts = db.OrderProducts.FirstOrDefault(op => op.OrderId == id);
+
+            db.OrderProducts.Remove(dbOrderProducts);
+
+            db.Orders.Remove(dbOrder);
+
+            var result = await db.SaveChangesAsync();
+
+            return result == 0 ? StatusCodes.Status502BadGateway : StatusCodes.Status200OK;
         }
     }
 }

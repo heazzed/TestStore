@@ -21,12 +21,6 @@ namespace TestStore.AuthApi.Services
         {
             return db.Users.SingleOrDefault(u => u.Email == email && u.Password == password);
         }
-
-    //using StreamReader reader = new StreamReader(httpRequest.Body);
-
-    //var body = await reader.ReadToEndAsync();
-
-    //User user = JsonConvert.DeserializeObject<User>(body);
-}
+    }
 
 }

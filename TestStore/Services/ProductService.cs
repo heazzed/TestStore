@@ -41,24 +41,16 @@ namespace TestStore.Services
             return db.Products.FirstOrDefault(p => p.Id == id);
         }
 
-        public async Task<int> UpdateProductByIdAsync(HttpRequest httpRequest)
+        public async Task<int> UpdateProductByIdAsync(Product updateProduct)
         {
-            using StreamReader reader = new StreamReader(httpRequest.Body);
-
-            var body = await reader.ReadToEndAsync();
-
-            Product updateProduct = JsonConvert.DeserializeObject<Product>(body);
-
             var dbProduct = db.Products.FirstOrDefault(p => p.Id == updateProduct.Id);
 
             dbProduct.Pieces = updateProduct.Pieces;
 
-            db.Update(dbProduct); // Need it?
-
             var result = await db.SaveChangesAsync();
 
             return result == 0 ? StatusCodes.Status502BadGateway : StatusCodes.Status200OK;
-                // Right code 502? // Must I return status code at all?
+            // Right code 502? // Must I return status code at all?
         }
 
         public async Task<int> PatchProductByIdAsync(Product patchProduct)
@@ -97,20 +89,22 @@ namespace TestStore.Services
                 dbProduct.Price = patchProduct.Price;
             }
 
-            //...
-
-            // More if-cases
-
-            //...
-
             // Make to switch?  Or make smth anoter?
-
-            db.Update(dbProduct); // Need it?
 
             var result = await db.SaveChangesAsync();
 
             return result == 0 ? StatusCodes.Status502BadGateway : StatusCodes.Status200OK;
-            
         }
+
+        public async Task<int> DeleteProductByIdAsync(string id)
+        {
+            var dbProduct = db.Products.FirstOrDefault(p => p.Id == id);
+
+            db.Products.Remove(dbProduct);
+
+            var result = await db.SaveChangesAsync();
+
+            return result == 0 ? StatusCodes.Status502BadGateway : StatusCodes.Status200OK;
+        } 
     }
 }

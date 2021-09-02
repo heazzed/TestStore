@@ -46,9 +46,9 @@ namespace TestStore.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateProductByIdAsync()
+        public async Task<IActionResult> UpdateProductByIdAsync([FromBody] Product product)
         {
-            return StatusCode(await productService.UpdateProductByIdAsync(HttpContext.Request));
+            return StatusCode(await productService.UpdateProductByIdAsync(product));
         }
 
         [HttpPatch]
@@ -56,6 +56,13 @@ namespace TestStore.Controllers
         public async Task<IActionResult> PatchProductByIdAsync([FromBody] Product product)
         {
             return StatusCode(await productService.PatchProductByIdAsync(product));
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteProductByIdAsync(string id)
+        {
+            return StatusCode(await productService.DeleteProductByIdAsync(id));
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TestStore.Entities;
 using TestStore.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -36,9 +37,23 @@ namespace TestStore.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrderAsync()
+        public async Task<IActionResult> CreateOrderAsync([FromBody] Order order)
         {
-            return StatusCode(await orderService.CreateOrdersAsync(HttpContext.Request));
+            return StatusCode(await orderService.CreateOrderAsync(order));
+        }
+
+        [HttpPatch]
+        [Route("~/[controller]/{id}")]
+        public async Task<IActionResult> PatchOrderByIdAsync([FromRoute] string id, [FromBody] Order order)
+        {
+            return StatusCode(await orderService.PatchOrderByIdAsync(id, order));
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteOrderByIdAsync(string id)
+        {
+            return StatusCode(await orderService.DeleteOrderByIdAsync(id));
         }
     }
 }

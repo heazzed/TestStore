@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace TestStore.Entities
 {
     public class OrderProduct
@@ -19,7 +21,9 @@ namespace TestStore.Entities
         public string Description { get; set; }
 
         public int Pieces { get; set; }
-
+        [Column(TypeName = "decimal(18,4)")]
         public decimal Price { get; set; }
+
+        public string OrderId { get; set; }
     }
 }
