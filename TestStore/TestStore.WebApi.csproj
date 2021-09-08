@@ -17,11 +17,19 @@
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.9" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Microsoft.EntityFrameworkCore.Design" />
     <None Remove="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
     <None Remove="AutoMapper" />
+    <None Remove="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+    <None Remove="Profiles\" />
+    <None Remove="DtoEntities\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Profiles\" />
+    <Folder Include="EntitiesDto\" />
   </ItemGroup>
 </Project>

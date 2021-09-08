@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -15,6 +16,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using TestStore.Models;
 using TestStore.Services;
+using TestStore.WebApi.Profiles;
 
 namespace TestStore
 {
@@ -47,6 +49,20 @@ namespace TestStore
                                                           .AllowAnyHeader();
                                   });
             });
+
+
+            //var mapperConfig = new MapperConfiguration(mc =>
+            //{
+            //    mc.AddProfile(new MappingProfile());
+            //});
+
+            //IMapper mapper = mapperConfig.CreateMapper();
+
+            //services.AddSingleton(mapper); // this lifetime cycle?
+
+            services.AddAutoMapper(typeof(MappingProfile));
+
+
 
             services.AddTransient<CategoryService>(); // 
                                                       //
