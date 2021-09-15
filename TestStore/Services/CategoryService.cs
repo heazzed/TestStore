@@ -1,6 +1,11 @@
-﻿using System;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TestStore.Entities;
+using TestStore.EntitiesDto;
 using TestStore.Models;
 
 namespace TestStore.Services
@@ -9,14 +14,28 @@ namespace TestStore.Services
     {
         readonly StoreContext db;
 
-        public CategoryService(StoreContext db)
+        readonly IMapper mapper;
+
+        public CategoryService(StoreContext db, IMapper mapper)
         {
             this.db = db;
+            this.mapper = mapper;
         }
 
-        public IQueryable<Category> GetCategories()
+        public async Task<List<CategoryDto>> GetCategoriesAsync() // + 
         {
-            return db.Categories;
+            var categories = await db.Categories.ToListAsync();
+
+            List<CategoryDto> categoriesDto = new List<CategoryDto>();
+
+            foreach (var item in categories)
+            {
+                var categoryDto = mapper.Map<Category, CategoryDto>(item);
+
+                categoriesDto.Add(categoryDto);
+            }
+
+            return categoriesDto;
         }
     }
 }

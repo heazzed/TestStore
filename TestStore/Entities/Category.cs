@@ -7,11 +7,11 @@ namespace TestStore.Entities
 {
     public class Category
     {
-        #nullable enable
-        public string? Id  { get; set; }
+#nullable enable
+        public Guid? Id  { get; set; }
 
         public string? Img { get; set; }
-        #nullable disable
+#nullable disable
 
         public string Name { get; set; }
 

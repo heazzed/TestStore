@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using TestStore.Entities;
+using TestStore.EntitiesDto;
 using TestStore.Models;
 using TestStore.Services;
 
@@ -26,41 +27,41 @@ namespace TestStore.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct([FromBody] Product product)
+        public async Task<ActionResult> CreateProduct([FromBody] ProductDto productDto) // +
         {
-            return StatusCode(await productService.CreateProductAsync(product));
+            return StatusCode(await productService.CreateProductAsync(productDto));
         }
 
         [HttpGet]
-        public IActionResult GetProducts(string categoryId)
+        public async Task<ActionResult<List<ProductDto>>> GetProductsAsync(string categoryId = null) // +
         {
-            return Json(productService.GetProducts(categoryId));
+            return await productService.GetProductsAsync(categoryId);
         }
 
         [HttpGet]
         [Route("{id}")]
-        public IActionResult GetProductById(string id)
+        public async Task<ActionResult<ProductDto>> GetProductByIdAsync(string id) // +
         {
-            return Json(productService.GetProductById(id));
+            return await productService.GetProductByIdAsync(id);
         }
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateProductByIdAsync([FromBody] Product product)
+        public async Task<ActionResult> UpdateProductByIdAsync([FromBody] ProductDto productDto) // +
         {
-            return StatusCode(await productService.UpdateProductByIdAsync(product));
+            return StatusCode(await productService.UpdateProductByIdAsync(productDto));
         }
 
         [HttpPatch]
         [Route("{id}")]
-        public async Task<IActionResult> PatchProductByIdAsync([FromBody] Product product)
+        public async Task<IActionResult> PatchProductByIdAsync([FromBody] ProductDto productDto) // +
         {
-            return StatusCode(await productService.PatchProductByIdAsync(product));
+            return StatusCode(await productService.PatchProductByIdAsync(productDto));
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<IActionResult> DeleteProductByIdAsync(string id)
+        public async Task<ActionResult> DeleteProductByIdAsync(string id) // +
         {
             return StatusCode(await productService.DeleteProductByIdAsync(id));
         }

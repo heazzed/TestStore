@@ -8,9 +8,9 @@ namespace TestStore.EntitiesDto
 {
     public class OrderDto
     {
-        #nullable enable 
+#nullable enable
         public string? Id { get; set; }
-        #nullable disable
+#nullable disable
 
         public ICollection<OrderProductDto> Products { get; set; }
 
@@ -18,13 +18,6 @@ namespace TestStore.EntitiesDto
 
         public string Status { get; set; }
 
-        public enum StatusEnum // Need it? // From front order-json getting this
-        {
-            Обрабатывается,
-            Подтвержден,
-            Выполнен,
-            Отменен
-        }
     }
 }
 

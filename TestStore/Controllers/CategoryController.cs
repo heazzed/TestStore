@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using TestStore.Entities;
+using TestStore.EntitiesDto;
 using TestStore.Models;
 using TestStore.Services;
 
@@ -24,9 +25,9 @@ namespace TestStore.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetCategories()
+        public async Task<ActionResult<List<CategoryDto>>> GetCategoriesAsync() // +
         {
-            return Json(categoryService.GetCategories());
+            return await categoryService.GetCategoriesAsync();
         }
     }
 }

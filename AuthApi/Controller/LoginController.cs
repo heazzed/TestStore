@@ -24,9 +24,9 @@ namespace TestStore.AuthApi.Controller
         }
 
         [HttpPost]
-        public IActionResult Login([FromBody] User reqUser)
+        public async Task<ActionResult<AuthResponse>> Login([FromBody] User reqUser)
         {
-            var user = loginService.Authenticate(reqUser.Email, reqUser.Password);
+            var user = await loginService.AuthenticateAsync(reqUser.Email, reqUser.Password);
 
             if (user != null)
             {
@@ -36,7 +36,7 @@ namespace TestStore.AuthApi.Controller
                     User = user
                 };
 
-                return Content(JsonConvert.SerializeObject(response));
+                return response;
             }
 
             return Unauthorized();

@@ -8,16 +8,16 @@ namespace TestStore.Entities
 {
     public class Product
     {
-        #nullable enable
-        public string? Id { get; set; }
+#nullable enable
+        public Guid? Id { get; set; }
 
         public string? Img { get; set; }
-        #nullable disable
 
-        public Category Category { get; set; } // Need it?
-                                                 // May be not needed if make FK from categoryId to Id in Categories
+        public Guid? CategoryId { get; set; }
+#nullable disable
+        public Category Category { get; set; }
 
-        public string CategoryId { get; set; }
+        public ICollection<OrderProduct> OrderProducts { get; set; }
 
         public string Name { get; set; }
 
@@ -25,7 +25,7 @@ namespace TestStore.Entities
 
         public int Pieces { get; set; }
 
-        [Column(TypeName = "decimal(18,4)")]
+        [Column(TypeName = "decimal(18, 4)")]
         public decimal Price { get; set; }
     }
 }

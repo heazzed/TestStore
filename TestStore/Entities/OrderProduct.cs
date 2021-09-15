@@ -1,29 +1,24 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TestStore.Entities
 {
+    [Keyless]
     public class OrderProduct
     {
-        #nullable enable
-        public string? Id { get; set; }
+#nullable enable
+        public Guid? ProductId { get; set; }
 
-        public string? Img { get; set; }
-        #nullable disable
+        public Guid? OrderId { get; set; }
 
-        public Category Category { get; set; } // Need it?
-                                                 // May be not needed if make FK from categoryId to Id in Categories
+#nullable disable
 
-        public string CategoryId { get; set; }
+        public Order Order { get; set; }
 
-        public string Name { get; set; }
+        public Product Product { get; set; }
 
-        public string Description { get; set; }
-
-        public int Pieces { get; set; }
-        [Column(TypeName = "decimal(18,4)")]
-        public decimal Price { get; set; }
-
-        public string OrderId { get; set; }
+        [Column(TypeName = "decimal(18, 4)")]
+        public decimal Pieces { get; set; }
     }
 }

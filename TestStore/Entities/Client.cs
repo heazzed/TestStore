@@ -8,11 +8,11 @@ namespace TestStore.Entities
 {
     public class Client
     {
-        #nullable enable
-        public string? OrderId { get; set; }
+#nullable enable
+        public Guid? OrderId { get; set; }
 
         public string? Email { get; set; }
-        #nullable disable
+#nullable disable
 
         public string FirstName { get; set; }
 

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TestStore.Entities;
+using TestStore.EntitiesDto;
 using TestStore.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -24,34 +25,34 @@ namespace TestStore.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetOrders()
+        public async Task<ActionResult<List<OrderDto>>> GetOrdersAsync() // +
         {
-            return Json(orderService.GetOrders());
+            return await orderService.GetOrdersAsync();
         }
 
         [HttpGet]
         [Route("{id}")]
-        public IActionResult GetOrderById(string id)
+        public async Task<ActionResult<OrderDto>> GetOrderByIdAsync(string id) // +
         {
-            return Json(orderService.GetOrderById(id));
+            return await orderService.GetOrderByIdAsync(id);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrderAsync([FromBody] Order order)
+        public async Task<ActionResult> CreateOrderAsync([FromBody] OrderDto orderDto) // +
         {
-            return StatusCode(await orderService.CreateOrderAsync(order));
+            return StatusCode(await orderService.CreateOrderAsync(orderDto));
         }
 
         [HttpPatch]
         [Route("~/[controller]/{id}")]
-        public async Task<IActionResult> PatchOrderByIdAsync([FromRoute] string id, [FromBody] Order order)
+        public async Task<ActionResult> PatchOrderByIdAsync([FromRoute] string id, [FromBody] OrderDto orderDto) // +
         {
-            return StatusCode(await orderService.PatchOrderByIdAsync(id, order));
+            return StatusCode(await orderService.PatchOrderByIdAsync(id, orderDto));
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<IActionResult> DeleteOrderByIdAsync(string id)
+        public async Task<ActionResult> DeleteOrderByIdAsync(string id) // +
         {
             return StatusCode(await orderService.DeleteOrderByIdAsync(id));
         }

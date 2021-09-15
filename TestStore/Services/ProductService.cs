@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using TestStore.Entities;
+using TestStore.EntitiesDto;
 using TestStore.Models;
 
 namespace TestStore.Services
@@ -14,14 +18,19 @@ namespace TestStore.Services
     {
         readonly StoreContext db;
 
-        public ProductService(StoreContext db)
+        readonly IMapper mapper;
+
+        public ProductService(StoreContext db, IMapper mapper)
         {
             this.db = db;
+            this.mapper = mapper;
         }
 
-        public async Task<int> CreateProductAsync(Product product)
+        public async Task<int> CreateProductAsync(ProductDto productDto) // +
         {
-            product.Id = db.Products.Max(p => p.Id) + "1"; // Need to Generate Id
+            var product = mapper.Map<Product>(productDto);
+
+            product.Id = Guid.NewGuid();
 
             await db.Products.AddAsync(product);
 
@@ -31,21 +40,36 @@ namespace TestStore.Services
         }
 
 
-        public IQueryable<Product> GetProducts(string categoryId = null)
+        public async Task<List<ProductDto>> GetProductsAsync(string categoryId) // +
         {
-            return categoryId == null ? db.Products : db.Products.Where(p => p.CategoryId == categoryId);
+            var products = categoryId == null ? await db.Products.ToListAsync() : 
+                await db.Products.Where(p => p.CategoryId.ToString() == categoryId).ToListAsync();
+            
+            List<ProductDto> productsDto = new List<ProductDto>();
+
+            foreach (var item in products)
+            {
+                ProductDto productDto = mapper.Map<Product, ProductDto>(item);
+                productsDto.Add(productDto);
+            }
+
+            return productsDto;
         }
 
-        public Product GetProductById(string id)
+        public async Task<ProductDto> GetProductByIdAsync(string id) // +
         {
-            return db.Products.FirstOrDefault(p => p.Id == id);
+            var product = await db.Products.FirstOrDefaultAsync(p => p.Id.ToString() == id);
+
+            var productDto = mapper.Map<Product, ProductDto>(product);
+
+            return productDto;
         }
 
-        public async Task<int> UpdateProductByIdAsync(Product updateProduct)
+        public async Task<int> UpdateProductByIdAsync(ProductDto updateProductDto) // +
         {
-            var dbProduct = db.Products.FirstOrDefault(p => p.Id == updateProduct.Id);
+            var dbProduct = await db.Products.FirstOrDefaultAsync(p => p.Id.ToString() == updateProductDto.Id);
 
-            dbProduct.Pieces = updateProduct.Pieces;
+            dbProduct.Pieces = updateProductDto.Pieces;
 
             var result = await db.SaveChangesAsync();
 
@@ -53,9 +77,11 @@ namespace TestStore.Services
             // Right code 502? // Must I return status code at all?
         }
 
-        public async Task<int> PatchProductByIdAsync(Product patchProduct)
+        public async Task<int> PatchProductByIdAsync(ProductDto patchProductDto) // +
         {
-            var dbProduct = db.Products.FirstOrDefault(p => p.Id == patchProduct.Id);
+            var dbProduct = await db.Products.FirstOrDefaultAsync(p => p.Id.ToString() == patchProductDto.Id);
+
+            var patchProduct = mapper.Map<Product>(patchProductDto);
 
             // TODO Logic how to patch
 
@@ -96,9 +122,9 @@ namespace TestStore.Services
             return result == 0 ? StatusCodes.Status502BadGateway : StatusCodes.Status200OK;
         }
 
-        public async Task<int> DeleteProductByIdAsync(string id)
+        public async Task<int> DeleteProductByIdAsync(string id) // +
         {
-            var dbProduct = db.Products.FirstOrDefault(p => p.Id == id);
+            var dbProduct = await db.Products.FirstOrDefaultAsync(p => p.Id.ToString() == id);
 
             db.Products.Remove(dbProduct);
 

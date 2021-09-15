@@ -50,19 +50,7 @@ namespace TestStore
                                   });
             });
 
-
-            //var mapperConfig = new MapperConfiguration(mc =>
-            //{
-            //    mc.AddProfile(new MappingProfile());
-            //});
-
-            //IMapper mapper = mapperConfig.CreateMapper();
-
-            //services.AddSingleton(mapper); // this lifetime cycle?
-
             services.AddAutoMapper(typeof(MappingProfile));
-
-
 
             services.AddTransient<CategoryService>(); // 
                                                       //
@@ -78,8 +66,6 @@ namespace TestStore
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            //app.UseHttpsRedirection();
 
             app.UseRouting();
 

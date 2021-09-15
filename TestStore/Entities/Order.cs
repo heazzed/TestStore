@@ -8,23 +8,15 @@ namespace TestStore.Entities
 {
     public class Order
     {
-        #nullable enable 
-        public string? Id { get; set; }
-        #nullable disable
+#nullable enable
+        public Guid? Id { get; set; }
+#nullable disable
 
         public ICollection<OrderProduct> Products { get; set; }
 
         public Client Client { get; set; }
 
         public string Status { get; set; }
-
-        public enum StatusEnum // Need it? // From front order-json getting this
-        {
-            Обрабатывается,
-            Подтвержден,
-            Выполнен,
-            Отменен
-        }
     }
 }
 

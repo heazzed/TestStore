@@ -21,11 +21,21 @@ namespace TestStore.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Product>().HasKey(p => p.Id); // Need it? Set Id prop by default
-
             modelBuilder.Entity<Client>().HasKey(c => c.OrderId);
 
             modelBuilder.Entity<User>().HasKey(u => u.Email);
+
+            modelBuilder.Entity<OrderProduct>().HasKey( op => new { op.OrderId, op.ProductId });
+
+            modelBuilder.Entity<OrderProduct>()
+               .HasOne(op => op.Order)
+               .WithMany(o => o.Products)
+               .HasForeignKey(k => k.OrderId);
+
+            modelBuilder.Entity<OrderProduct>()
+                .HasOne(op => op.Product)
+                .WithMany(p => p.OrderProducts)
+                .HasForeignKey(k => k.ProductId);
         }
     }
 }
